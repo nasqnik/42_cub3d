@@ -12,37 +12,32 @@
 
 #include "../cub3d.h"
 
+static void	cleanup_mlx(t_info *info)
+{
+	if (info->mlx == NULL)
+		return ;
+	destroy_textures(info);
+	if (info->_img != NULL)
+		mlx_destroy_image(info->mlx, info->_img);
+	if (info->mlx_win != NULL)
+		mlx_destroy_window(info->mlx, info->mlx_win);
+#if __linux__
+	mlx_destroy_display(info->mlx);
+#endif
+	free(info->mlx);
+}
+
 int	quit_program(t_info *info)
 {
 	ft_free_file("Thanks for playing!\n", info);
-	if (info->mlx != NULL)
-	{
-		if (info->mlx_win != NULL)
-		{
-			mlx_destroy_window(info->mlx, info->mlx_win);
-			if (info->_img != NULL)
-				mlx_destroy_image(info->mlx, info->_img);
-		}
-		free(info->mlx);
-		destroy_textures(info);
-	}
+	cleanup_mlx(info);
 	exit(0);
 }
 
 int	quit_program_message(char *message, t_info *info)
 {
 	ft_free_file(message, info);
-	if (info->mlx != NULL)
-	{
-		if (info->mlx_win != NULL)
-		{
-			mlx_destroy_window(info->mlx, info->mlx_win);
-			if (info->_img != NULL)
-				mlx_destroy_image(info->mlx, info->_img);
-		}
-		free(info->mlx);
-		destroy_textures(info);
-	}
+	cleanup_mlx(info);
 	exit(1);
 }
 
